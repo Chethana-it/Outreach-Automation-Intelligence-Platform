@@ -13,3 +13,93 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String?  // hashed (for email/pass)
+  name      String?
+  googleId  String?  @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  Campaigns Campaign[]
+}
+
+model XProfile {
+  id              String   @id @default(cuid())
+  username        String   @unique
+  displayName     String?
+  bio             String?
+  location        String?
+  followersCount  Int      @default(0)
+  followingCount  Int      @default(0)
+  postsCount      Int      @default(0)
+  lastActive      DateTime?
+  verified        Boolean  @default(false)
+  interests       String[] @db.Text
+  profileImageUrl String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  Deals Deal[]
+}
+
+model Campaign {
+  id          String    @id @default(cuid())
+  name        String
+  description String?
+  status      String    @default("draft") // 'draft' | 'active' | 'paused' | 'completed'
+  ownerId     String
+  owner       User      @relation(fields: [ownerId], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  Deals       Deal[]
+}
+
+
+model Deal {
+  id              String   @id @default(cuid())
+  profileId       String
+  campaignId      String
+  stage           String   @default("lead") // 'lead' | 'contacted' | 'interested' | 'closed'
+  followUpStatus  String   @default("pending") // 'pending' | 'sent' | 'failed'
+  nextFollowUpAt  DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  Profile  XProfile @relation(fields: [profileId], references: [id])
+  Campaign Campaign @relation(fields: [campaignId], references: [id])
+
+  @@index([campaignId])
+  @@index([profileId])
+}
+
+
+model SyncEvent {
+  id        String   @id @default(cuid())
+  type      String
+  entityId  String
+  payload   Json
+  source    String // 'scraper' | 'campaign' | 'followup'
+  status    String @default("pending") // 'pending' | 'processed' | 'failed'
+  createdAt DateTime @default(now())
+
+  @@index([type])
+  @@index([status])
+}
+
+
+model AuditLog {
+  id          String   @id @default(cuid())
+  userId      String?
+  action      String
+  entityType  String?
+  entityId    String?
+  payload     Json
+  createdAt   DateTime @default(now())
+
+  @@index([userId])
+  @@index([action])
+}
