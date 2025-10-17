@@ -1,0 +1,3 @@
+[submodule "cuegrowth-backend"]
+	path = cuegrowth-backend
+	url = https://github.com/Chethana-it/Outreach-Automation-Intelligence-Platform.git
