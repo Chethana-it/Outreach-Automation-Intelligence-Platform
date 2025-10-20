@@ -16,6 +16,18 @@ services:
       interval: 5s
       timeout: 3s
       retries: 10
+  
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"         # exposes to host so local Nest can use it too
+    command: ["redis-server", "--save", "60", "1", "--loglevel", "warning"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
 
   app:
       # Use your Dockerfile to build the app image
@@ -29,12 +41,18 @@ services:
       depends_on:
         db:
           condition: service_healthy
+        redis:
+          condition: service_healthy
       # For dev hot-reload (optional): mount code + run start:dev
       volumes:
         - .:/usr/src/app
         - /usr/src/app/node_modules
         - /usr/src/app/prisma
         - /usr/src/app/prisma/migrations
+      environment:
+        - REDIS_URL=redis://redis:6379
+        - REDIS_HOST=redis
+        - REDIS_PORT=6379
       command: >
         sh -c "
           npx prisma generate &&
