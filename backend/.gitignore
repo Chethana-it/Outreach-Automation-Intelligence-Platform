@@ -5,6 +5,9 @@ node_modules/
 dist/
 build/
 
+# migrations
+prisma/migrations/
+
 # logs
 npm-debug.log*
 yarn-debug.log*

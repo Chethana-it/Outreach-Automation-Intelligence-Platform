@@ -9,7 +9,7 @@ async function bootstrap() {
     const prismaService = app.get(PrismaService);
   try {
     await prismaService.$connect();
-    console.log('✅ Database connected successfully!');
+    console.log('✅ PostgreSQL Database connected successfully!');
   } catch (error) {
     console.error('❌ Database connection failed:', error.message);
     process.exit(1);
