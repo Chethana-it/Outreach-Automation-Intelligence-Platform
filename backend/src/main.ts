@@ -15,6 +15,9 @@ async function bootstrap() {
     process.exit(1);
   }
 
+  const bullBoardAdapter = app.get('BULL_BOARD_ADAPTER');
+  app.use('/admin/queues', bullBoardAdapter.getRouter());
+
   const config = new DocumentBuilder()
   .setTitle('CueGrowth API')
   .setDescription('Outreach Automation & Intelligence API')
