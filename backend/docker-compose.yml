@@ -28,6 +28,19 @@ services:
       interval: 5s
       timeout: 3s
       retries: 10
+  
+  # redisinsight:
+  #   image: redislabs/redisinsight:latest
+  #   container_name: redis-insight
+  #   ports:
+  #     - "8001:5540" # Map host port 8001 to container port 8001
+  #   depends_on:
+  #     - redis
+  #   volumes:
+  #     - redis_insight_volume_data:/db
+  
+  
+  
 
   app:
       # Use your Dockerfile to build the app image
@@ -64,3 +77,7 @@ services:
 
 volumes:
   dbdata:
+  redis_volume_data:
+  redis_insight_volume_data:
+  redis_data:
+    driver: local
