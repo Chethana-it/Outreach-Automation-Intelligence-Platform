@@ -6,13 +6,15 @@ import { PrismaModule } from './prisma/prisma.module';
 import { RedisModule } from './redis/redis.module';
 import { AuthModule } from './auth/auth.module';
 import { RateLimitMiddleware } from './rate-limit.middleware';
+import { EventsModule } from './events/events.module';
 
 @Module({
   imports: [
      ConfigModule.forRoot({ isGlobal: true }),
      PrismaModule,
      RedisModule,
-     AuthModule
+     AuthModule,
+     EventsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
