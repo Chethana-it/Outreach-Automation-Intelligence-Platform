@@ -9,13 +9,12 @@ import { AuthModule } from './auth/auth.module';
 import { RateLimitMiddleware } from './rate-limit.middleware';
 import { EventsModule } from './events/events.module';
 import { ScraperModule } from './scraper/scraper.module';
-import { BullBoardModule } from './bull-board/bull-board.module';
+
 
 
 @Module({
   imports: [
      ConfigModule.forRoot({ isGlobal: true }),
-     BullBoardModule.forRoot(),
      PrismaModule,
      RedisModule,
      AuthModule,

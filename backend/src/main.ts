@@ -9,14 +9,13 @@ async function bootstrap() {
     const prismaService = app.get(PrismaService);
   try {
     await prismaService.$connect();
-    console.log('✅ Database connected successfully!');
+    console.log('✅ postgres Database connected successfully!');
   } catch (error) {
     console.error('❌ Database connection failed:', error.message);
     process.exit(1);
   }
 
-  const bullBoardAdapter = app.get('BULL_BOARD_ADAPTER');
-  app.use('/admin/queues', bullBoardAdapter.getRouter());
+ 
 
   const config = new DocumentBuilder()
   .setTitle('CueGrowth API')

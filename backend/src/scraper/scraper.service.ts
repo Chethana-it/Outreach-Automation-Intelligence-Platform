@@ -19,7 +19,11 @@ export class ScraperService implements OnModuleInit {
   constructor(private prisma: PrismaService) {}
 
   async onModuleInit() {
-    const connection = new Redis(process.env.REDIS_URL!);
+    const connection = new Redis(process.env.REDIS_URL!,
+      {
+        maxRetriesPerRequest: null,
+      }
+    );
     this.redis = connection;
 
     this.queue = new Queue<ScrapeJob>(SCRAPE_QUEUE, { connection });
@@ -79,21 +83,26 @@ export class ScraperService implements OnModuleInit {
 
     const page = await context.newPage();
     try {
-      await page.goto(url, { waitUntil: 'networkidle' });
+      await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 120_000 });
 
       // naive selectors for demo – X changes often; adapt if needed
       // try/catch each to avoid crash
       const username = url.split('/').pop()!.replace('@', '');
       const displayName = await safeText(page, 'div[data-testid="UserName"] span')
         ?? await safeText(page, 'header h2'); // fallback
-      const bio = await safeText(page, 'div[data-testid="UserDescription"]');
+      const bio = await safeText(page, 'div[data-testid="UserDescription"] span');
       const location = await safeText(page, 'div[data-testid="UserProfileHeader_Items"] span');
       const verified = !!(await page.$('svg[aria-label="Verified account"]'));
 
       // counts (very loose demo scraping; real site is dynamic)
-      const followersCount = await numericFrom(page, 'a[href$="/verified_followers"] span, a[href$="/followers"] span');
-      const followingCount = await numericFrom(page, 'a[href$="/following"] span');
+      const followersCount = await numericFrom(page, 'div[class="css-175oi2r r-1rtiivn"] span span');
+      const followingCount = await numericFrom(page,  'a[href$="/verified_followers"] span span');
       const postsCount = await numericFrom(page, 'a[href$="/with_replies"] span') ?? 0;
+
+      console.log("followersCount:", followersCount);
+      console.log("followingCount:",followingCount);
+      
+      
 
       const lastActive = new Date(); // for demo; would need to inspect first tweet timestamp
 
@@ -119,6 +128,9 @@ export class ScraperService implements OnModuleInit {
           lastActive,
         },
       });
+
+      console.log("db updated xprofile...:", profile.username);
+      
 
       // publish event
       await EventsPublisher.publish({

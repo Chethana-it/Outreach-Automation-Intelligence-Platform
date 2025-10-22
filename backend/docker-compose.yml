@@ -60,12 +60,12 @@ services:
       volumes:
         - .:/usr/src/app
         - /usr/src/app/node_modules
-        - /usr/src/app/prisma
-        - /usr/src/app/prisma/migrations
+        
       environment:
         - REDIS_URL=redis://redis:6379
         - REDIS_HOST=redis
         - REDIS_PORT=6379
+        - SCRAPER_HEADLESS=true
       command: >
         sh -c "
           npx prisma generate &&
