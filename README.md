@@ -35,27 +35,33 @@ It can:
 
 ## 📁 Project Structure
 
+```text
 backend/
 │
-├── src/
-│ ├── auth/ # Google OAuth + JWT rotation
-│ ├── campaigns/ # Campaign CRUD + CSV upload + assign
-│ ├── deals/ # Deal management + stage update
-│ ├── events/ # Pub/Sub handler + DLQ + dedup
-│ ├── scraper/ # Playwright scraping + BullMQ queue
-│ ├── prisma/ # Prisma service / module
-│ ├── app.module.ts
-│ └── main.ts
+├── src/                                 # Source code
+│   ├── auth/                            # Google OAuth + JWT rotation
+│   ├── campaigns/                       # Campaign CRUD + CSV upload + assign
+│   ├── deals/                           # Deal management + stage update
+│   ├── events/                          # Pub/Sub handler + DLQ + dedup
+│   ├── scraper/                         # Playwright scraping + BullMQ queue
+│   ├── prisma/                          # Prisma service / module
+│   ├── app.module.ts                    # Root NestJS module
+│   └── main.ts                          # Application bootstrap
 │
-├── prisma/
-│ └── schema.prisma
+├── prisma/                              # Prisma schema + migrations
+│   ├── schema.prisma
+│   └── migrations/
 │
-├── infra/
-│ └── docker-compose.yml # Postgres + Redis containers
+├── infra/                               # Infrastructure layer
+│   └── docker-compose.yml               # Postgres + Redis containers
 │
-├── Dockerfile
-├── .env
-└── README.md
+├── Dockerfile                           # Docker build for backend service
+├── package.json                         # NPM dependencies and scripts
+├── tsconfig.json                        # TypeScript configuration
+├── .env                                 # Environment variables
+├── .gitignore                           # Git ignore rules
+└── README.md                            # Project documentation
+
 
 
 
