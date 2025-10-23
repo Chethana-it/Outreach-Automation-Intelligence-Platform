@@ -1,0 +1,83 @@
+
+
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+  
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"         # exposes to host so local Nest can use it too
+    command: ["redis-server", "--save", "60", "1", "--loglevel", "warning"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+  
+  # redisinsight:
+  #   image: redislabs/redisinsight:latest
+  #   container_name: redis-insight
+  #   ports:
+  #     - "8001:5540" # Map host port 8001 to container port 8001
+  #   depends_on:
+  #     - redis
+  #   volumes:
+  #     - redis_insight_volume_data:/db
+  
+  
+  
+
+  app:
+      # Use your Dockerfile to build the app image
+      build:
+        context: .           # path to backend folder (where Dockerfile lives)
+        dockerfile: Dockerfile
+      ports:
+        - "4000:4000"
+      env_file:
+        - .env               # uses DATABASE_URL, REDIS_URL, PORT, etc.
+      depends_on:
+        db:
+          condition: service_healthy
+        redis:
+          condition: service_healthy
+      # For dev hot-reload (optional): mount code + run start:dev
+      volumes:
+        - .:/usr/src/app
+        - /usr/src/app/node_modules
+        
+      environment:
+        - REDIS_URL=redis://redis:6379
+        - REDIS_HOST=redis
+        - REDIS_PORT=6379
+        - SCRAPER_HEADLESS=true
+      command: >
+        sh -c "
+          npx prisma generate &&
+          npx prisma migrate reset --force &&
+          npx prisma migrate dev --name init &&
+          npm run start:dev
+        "
+ 
+
+volumes:
+  dbdata:
+  redis_volume_data:
+  redis_insight_volume_data:
+  redis_data:
+    driver: local
