@@ -99,66 +99,66 @@ SCRAPER_HEADLESS="true"
 SCRAPER_COOKIE_FILE="./cookies.json"
 ```
 
-# 1️⃣ Navigate to the Infra Folder
+## 1️⃣ Navigate to the Infra Folder
 cd backend/infra
 
-# 2️⃣ Start Containers
+## 2️⃣ Start Containers
 docker compose up -d
 
-# 3️⃣ Verify Services Are Running
+## 3️⃣ Verify Services Are Running
 docker ps
 
-# 4️⃣ Test Postgres Connection
+## 4️⃣ Test Postgres Connection
 docker exec -it cuegrowth_db psql -U postgres -d cuegrowth
 
-# 5️⃣ Test Redis Connection
+## 5️⃣ Test Redis Connection
 docker exec -it cuegrowth_redis redis-cli
 PING
 
-# 6️⃣ Stop & Remove Containers
+## 6️⃣ Stop & Remove Containers
 docker compose down
 
 
-# 🧱 Prisma Setup
+## 🧱 Prisma Setup
 cd ../
 npm install
 npx prisma generate
 npx prisma migrate dev --name init
 
 
-# 🚀 Run API
+## 🚀 Run API
 npm run start:dev
 
 
-# 🔐 Test Google OAuth Login (open in browser)
+## 🔐 Test Google OAuth Login (open in browser)
 http://localhost:4000/auth/google
 
 
-# 🕷️ ScraperService – Enqueue scrape jobs
+## 🕷️ ScraperService – Enqueue scrape jobs
 curl -X POST http://localhost:4000/scrape \
   -H "Content-Type: application/json" \
   -d '{"urls":["https://x.com/elonmusk","https://x.com/TwitterDev"]}'
 
 
-# 🎯 Create Campaign
+## 🎯 Create Campaign
 curl -X POST http://localhost:4000/campaigns \
   -H "Content-Type: application/json" \
   -d '{"name":"AI Outreach Batch 1","description":"Founders"}'
 
 
-# 📎 Assign Usernames or URLs to Campaign
+## 📎 Assign Usernames or URLs to Campaign
 curl -X POST http://localhost:4000/campaigns/<campaignId>/assign \
   -H "Content-Type: application/json" \
   -d '{"usernames":["elonmusk","BillGates"]}'
 
 
-# 📤 Upload CSV of Leads
+## 📤 Upload CSV of Leads
 curl -X POST http://localhost:4000/campaigns/<campaignId>/upload \
   -H "Content-Type: multipart/form-data" \
   -F "file=@leads.csv"
 
 
-# 🔄 Update Deal Stage
+## 🔄 Update Deal Stage
 curl -X PATCH http://localhost:4000/deals/<dealId>/stage \
   -H "Content-Type: application/json" \
   -d '{"stage":"contacted","followUpStatus":"sent"}'
