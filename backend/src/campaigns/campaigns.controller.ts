@@ -11,7 +11,7 @@ export class CampaignsController {
   constructor(private service: CampaignsService) {}
 
   // For demo, ownerId is hard-coded; later use req.user from JWT
-  private ownerId() { return 'cmh2br75h0000pp4wdyulqb17'; }
+  private ownerId() { return 'cmh34vtha0000pb4w8nuu5pow'; }
 
   @Post()
   create(@Body() dto: CreateCampaignDto) {

@@ -10,6 +10,7 @@ import { RateLimitMiddleware } from './rate-limit.middleware';
 import { EventsModule } from './events/events.module';
 import { ScraperModule } from './scraper/scraper.module';
 import { CampaignsModule } from './campaigns/campaigns.module';
+import { DealsModule } from './deals/deals.module';
 
 
 
@@ -21,7 +22,8 @@ import { CampaignsModule } from './campaigns/campaigns.module';
      AuthModule,
      EventsModule,
      ScraperModule,
-     CampaignsModule
+     CampaignsModule,
+     DealsModule
   ],
   controllers: [AppController],
   providers: [AppService],
