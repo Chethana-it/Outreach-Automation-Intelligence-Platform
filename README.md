@@ -61,7 +61,7 @@ backend/
 ├── .env                                 # Environment variables
 ├── .gitignore                           # Git ignore rules
 └── README.md                            # Project documentation
-
+```
 
 
 
@@ -97,7 +97,7 @@ GOOGLE_CALLBACK_URL="http://localhost:4000/auth/google/callback"
 BULL_CONCURRENCY="2"
 SCRAPER_HEADLESS="true"
 SCRAPER_COOKIE_FILE="./cookies.json"
-
+```
 
 # 1️⃣ Navigate to the Infra Folder
 cd backend/infra
