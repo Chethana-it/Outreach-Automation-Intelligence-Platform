@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth.module';
 import { RateLimitMiddleware } from './rate-limit.middleware';
 import { EventsModule } from './events/events.module';
 import { ScraperModule } from './scraper/scraper.module';
+import { CampaignsModule } from './campaigns/campaigns.module';
 
 
 
@@ -19,7 +20,8 @@ import { ScraperModule } from './scraper/scraper.module';
      RedisModule,
      AuthModule,
      EventsModule,
-     ScraperModule
+     ScraperModule,
+     CampaignsModule
   ],
   controllers: [AppController],
   providers: [AppService],

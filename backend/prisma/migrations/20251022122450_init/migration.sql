@@ -100,6 +100,9 @@ CREATE INDEX "Deal_campaignId_idx" ON "Deal"("campaignId");
 CREATE INDEX "Deal_profileId_idx" ON "Deal"("profileId");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Deal_campaignId_profileId_key" ON "Deal"("campaignId", "profileId");
+
+-- CreateIndex
 CREATE INDEX "SyncEvent_type_idx" ON "SyncEvent"("type");
 
 -- CreateIndex

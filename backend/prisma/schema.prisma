@@ -74,6 +74,8 @@ model Deal {
 
   @@index([campaignId])
   @@index([profileId])
+
+  @@unique([campaignId, profileId])
 }
 
 

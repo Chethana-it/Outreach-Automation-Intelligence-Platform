@@ -7,5 +7,6 @@ import { ScraperController } from './scraper.controller';
   imports: [PrismaModule],
   providers: [ScraperService],
   controllers: [ScraperController],
+  exports: [ScraperService],  
 })
 export class ScraperModule {}
